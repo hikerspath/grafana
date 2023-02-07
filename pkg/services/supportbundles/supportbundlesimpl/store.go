@@ -4,7 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -20,11 +22,15 @@ const (
 )
 
 func newStore(kv kvstore.KVStore) *store {
-	return &store{kv: kvstore.WithNamespace(kv, 0, "supportbundle")}
+	return &store{
+		kv:     kvstore.WithNamespace(kv, 0, "supportbundle"),
+		statKV: kvstore.WithNamespace(kv, 0, "supportbundlestats"),
+	}
 }
 
 type store struct {
-	kv *kvstore.NamespacedKVStore
+	kv     *kvstore.NamespacedKVStore
+	statKV *kvstore.NamespacedKVStore
 }
 
 type bundleStore interface {
@@ -47,6 +53,21 @@ func (s *store) Create(ctx context.Context, usr *user.SignedInUser) (*supportbun
 		Creator:   usr.Login,
 		CreatedAt: time.Now().Unix(),
 		ExpiresAt: time.Now().Add(defaultBundleExpiration).Unix(),
+	}
+
+	// update stats.bundles.count
+	fmt.Println("pkg/services/supportbundles/supportbundlesimpl/store.go:Create()")
+	bundlesCreatedString, _, err := s.statKV.Get(ctx, "supportbundlestats")
+	if err != nil {
+		return nil, err
+	}
+
+	bundlesCreated, _ := strconv.ParseInt(bundlesCreatedString, 10, 64)
+	fmt.Println(bundlesCreatedString) // TODO remove this
+	bundlesCreated = bundlesCreated + 1
+
+	if err := s.statKV.Set(ctx, "supportbundlestats", fmt.Sprint(bundlesCreated)); err != nil {
+		return nil, err
 	}
 
 	if err := s.set(ctx, &bundle); err != nil {

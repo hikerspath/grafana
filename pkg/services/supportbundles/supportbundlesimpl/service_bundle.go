@@ -6,6 +6,7 @@ import (
 	"compress/gzip"
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"path/filepath"
 	"runtime/debug"
@@ -63,6 +64,8 @@ func (s *Service) startBundleWork(ctx context.Context, collectors []string, uid 
 }
 
 func (s *Service) bundle(ctx context.Context, collectors []string, uid string) ([]byte, error) {
+	fmt.Println("pkg/services/supportbundles/supportbundlesimpl/service_bundle.go:bundle()")
+
 	lookup := make(map[string]bool, len(collectors))
 	for _, c := range collectors {
 		lookup[c] = true
