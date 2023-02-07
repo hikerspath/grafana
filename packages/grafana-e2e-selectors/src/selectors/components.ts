@@ -71,6 +71,7 @@ export const Components = {
     },
     Visualization: {
       Graph: {
+        container: 'Graph container',
         VisualizationTab: {
           legendSection: 'Legend section',
         },
@@ -381,5 +382,11 @@ export const Components = {
   },
   DebugOverlay: {
     wrapper: 'debug-overlay',
+  },
+  OrgRolePicker: {
+    input: 'Role',
+  },
+  AnalyticsToolbarButton: {
+    button: 'Dashboard insights',
   },
 };

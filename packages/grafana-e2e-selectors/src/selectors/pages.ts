@@ -238,4 +238,12 @@ export const Pages = {
       trashcanButton: 'public-dashboard-remove-button',
     },
   },
+  UserListPage: {
+    org: {
+      url: '/org/users',
+    },
+    admin: {
+      url: '/admin/users',
+    },
+  },
 };
