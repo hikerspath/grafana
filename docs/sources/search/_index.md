@@ -60,8 +60,8 @@ Complete the following steps to enable the `panelTitleSearch` feature toggle.
 
    ```
    [feature_toggles]
-   # enable features, separated by spaces
-   enable = dashboardPreviews
+   # enable features, separated by spaces (Default: dashboardPreviews)
+   enable = panelTitleSearch
    ```
 
 1. Save your changes and restart the Grafana server.
